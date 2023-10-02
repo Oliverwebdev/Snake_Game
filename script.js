@@ -11,6 +11,21 @@ let score = 0;
 let highscore = 0;
 let gameRunning = false;
 
+const gameAudio = document.getElementById("game-audio");
+const gameOverAudio = document.getElementById("game-over-audio");
+const eatAppleAudio = document.getElementById("eat-apple-audio");
+
+
+// game sounds
+function startGame() {
+  if (!gameRunning) {
+    startButton.disabled = true;
+    gameInterval = setInterval(gameLoop, 100);
+    gameRunning = true;
+    gameAudio.play(); // Spiele den Audioklang ab, wenn das Spiel gestartet wird
+  }
+}
+
 function draw() {
   gameBoard.innerHTML = "";
 
@@ -31,6 +46,9 @@ function draw() {
   scoreDisplay.textContent = `Punkte: ${score}`;
   highscoreDisplay.textContent = `Highscore: ${highscore}`;
 }
+
+startButton.addEventListener("click", startGame);
+
 
 function move() {
   const head = { ...snake[0] };
@@ -57,6 +75,8 @@ function move() {
     if (score > highscore) {
       highscore = score;
     }
+    eatAppleAudio.play(); // Spiele den Apfel-Sound ab, wenn die Schlange den Apfel frisst
+
     food = {
       x: Math.floor(Math.random() * gridSize) + 1,
       y: Math.floor(Math.random() * gridSize) + 1,
@@ -64,6 +84,8 @@ function move() {
   } else {
     snake.pop();
   }
+  checkCollision(); // Überprüfe auf Kollision nach jedem Zug
+
 }
 
 function changeDirection(event) {
@@ -95,6 +117,9 @@ function checkCollision() {
       .some((segment) => segment.x === head.x && segment.y === head.y)
   ) {
     clearInterval(gameInterval);
+    gameAudio.pause(); // Halte den Sound an, wenn das Spiel endet
+    gameOverAudio.play(); // Spiele den "Game Over" Sound ab
+
     alert(`Nicht schlecht! Du hast ${score} Punkte erreicht! `);
     if (score > highscore) {
       highscore = score;
@@ -114,11 +139,17 @@ function gameLoop() {
 }
 
 startButton.addEventListener("click", () => {
+  if (!gameRunning && collisionOccurred) {
+    collisionOccurred = false; // Setze die Kollisionsvariable zurück, wenn das Spiel neu gestartet wird
+  }
+
   if (!gameRunning) {
     startButton.disabled = true;
     gameInterval = setInterval(gameLoop, 100);
     gameRunning = true;
   }
 });
+
+
 
 document.addEventListener("keydown", changeDirection);

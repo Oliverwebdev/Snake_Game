@@ -5,16 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <link rel="shortcut icon" href="/imgs/schlange.png" type="image/x-icon" />
-    <audio src="/sounds/159408__noirenex__life-lost-game-over.wav"></audio>
-    <audio src="/sounds/412068__inspectorj__chewing-carrot-a.wav"></audio>
+    <audio id="game-over-audio" src="/sounds/159408__noirenex__life-lost-game-over.wav"></audio>
+    <audio id="eat-apple-audio" src="/sounds/Apple Bite - QuickSounds.com.mp3"></audio>
+      <audio id="game-audio" src="/sounds/trap-future-bass-royalty-free-music-167020 (1).mp3"></audio>
     <title>Snakee</title>
     <style></style>
   </head>
   <body>
     <h1>Snake Game</h1>
     <button id="start-button" class="btn">Start</button>
-    <p>Punkte: <span id="score">0</span></p>
-    <p>Highscore: <span id="highscore">0</span></p>
+    <p> <span id="score">0</span></p>
+    <p><span id="highscore">0</span></p>
     <div id="game-board"></div>
     <script src="script.js"></script>
   </body>
