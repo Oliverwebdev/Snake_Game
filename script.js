@@ -105,6 +105,68 @@ function changeDirection(event) {
   }
 }
 
+// Event-Handler für Tasten- und Touch-Ereignisse
+function changeDirection(event) {
+  if (event.type === "keydown") {
+      switch (event.key) {
+          case "ArrowUp":
+              if (direction !== "down") direction = "up";
+              break;
+          case "ArrowDown":
+              if (direction !== "up") direction = "down";
+              break;
+          case "ArrowLeft":
+              if (direction !== "right") direction = "left";
+              break;
+          case "ArrowRight":
+              if (direction !== "left") direction = "right";
+              break;
+      }
+  } else if (event.type === "touchstart") {
+      // Berührungsposition speichern, wenn der Bildschirm berührt wird
+      touchStartX = event.touches[0].clientX;
+      touchStartY = event.touches[0].clientY;
+  } else if (event.type === "touchmove") {
+      // Berührungsposition aktualisieren, wenn der Finger bewegt wird
+      const touchX = event.touches[0].clientX;
+      const touchY = event.touches[0].clientY;
+      
+      // Berechnung der horizontalen und vertikalen Verschiebung
+      const deltaX = touchX - touchStartX;
+      const deltaY = touchY - touchStartY;
+      
+      // Überprüfen, ob die horizontale Verschiebung größer ist als die vertikale Verschiebung
+      // Ändere die Richtung entsprechend
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (deltaX > 0 && direction !== "left") {
+              direction = "right";
+          } else if (deltaX < 0 && direction !== "right") {
+              direction = "left";
+          }
+      } else {
+          // Überprüfen, ob die vertikale Verschiebung größer ist als die horizontale Verschiebung
+          // Ändere die Richtung entsprechend
+          if (deltaY > 0 && direction !== "up") {
+              direction = "down";
+          } else if (deltaY < 0 && direction !== "down") {
+              direction = "up";
+          }
+      }
+  }
+}
+
+// Touch-Events hinzufügen
+window.addEventListener("touchstart", changeDirection);
+window.addEventListener("touchmove", changeDirection);
+
+
+
+
+
+
+
+
+
 function checkCollision() {
   const head = snake[0];
   if (
