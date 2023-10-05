@@ -1,7 +1,9 @@
 window.onload = function() {
-  alert("Willkommen bei Snakee!\n\nAnweisungen:\n- Verwende die Pfeiltasten, um die Schlange zu bewegen.\n- Iss die Äpfel, um Punkte zu sammeln.\n- Achte darauf, nicht gegen die Wände oder die Schlange selbst zu stoßen.\n\nViel Spaß!");
-
+    alert("Welcome to Snakee!\n\nInstructions:\n- Use the arrow keys to move the snake.\n- Eat the apples to collect points.\n- Be careful not to hit the walls or the snake itself.\n\nHave fun!");
+  
+  
   // Versuche, den Highscore aus dem LocalStorage wiederherzustellen
+
   highscore = parseInt(localStorage.getItem('highscore')) || 0;
   highscoreDisplay.textContent = ` ${highscore}`;
 }
@@ -128,12 +130,13 @@ function checkCollision() {
       gameOverAudio.play();
 
       if (score >= highscore) {
-          highscore = score;
-          saveHighscoreToLocalStorage();
-          alert(`Glückwunsch! Du hast einen neuen Highscore erreicht: ${highscore} Punkte!`);
-      } else {
-          alert(`Nicht schlecht! Du hast ${score} Punkte erreicht. Versuche es weiter, um den Highscore von ${highscore} zu schlagen!`);
-      }
+    highscore = score;
+    saveHighscoreToLocalStorage();
+    alert(`Congratulations! You've set a new high score: ${highscore} points!`);
+} else {
+    alert(`Not bad! You scored ${score} points. Keep trying to beat the high score of ${highscore}!`);
+}
+
 
       snake = [{ x: 5, y: 5 }];
       direction = "right";
