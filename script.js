@@ -1,8 +1,13 @@
-let gameInterval;
 const gameBoard = document.getElementById("game-board");
 const scoreDisplay = document.getElementById("score");
 const highscoreDisplay = document.getElementById("highscore");
 const startButton = document.getElementById("start-button");
+const timer = document.getElementById("timer")
+const gameAudio = document.getElementById("game-audio");
+const gameOverAudio = document.getElementById("game-over-audio");
+const eatAppleAudio = document.getElementById("eat-apple-audio");
+
+let gameInterval;
 const gridSize = 20;
 let snake = [{ x: 5, y: 5 }];
 let food = { x: 10, y: 10 };
@@ -11,9 +16,7 @@ let score = 0;
 let highscore = 0;
 let gameRunning = false;
 
-const gameAudio = document.getElementById("game-audio");
-const gameOverAudio = document.getElementById("game-over-audio");
-const eatAppleAudio = document.getElementById("eat-apple-audio");
+
 
 
 // game sounds
@@ -43,8 +46,8 @@ function draw() {
   foodElement.classList.add("food");
   gameBoard.appendChild(foodElement);
 
-  scoreDisplay.textContent = `Punkte: ${score}`;
-  highscoreDisplay.textContent = `Highscore: ${highscore}`;
+  scoreDisplay.textContent = ` ${score}`;
+  highscoreDisplay.textContent = ` ${highscore}`;
 }
 
 startButton.addEventListener("click", startGame);

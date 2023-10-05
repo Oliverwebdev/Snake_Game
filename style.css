@@ -63,4 +63,18 @@ p {
   border-radius: 10px;
 }
 
+#creator{
+  animation: forward 2s infinite;
+}
 
+@keyframes forward {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
