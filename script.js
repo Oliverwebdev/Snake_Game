@@ -132,7 +132,7 @@ function checkCollision() {
           saveHighscoreToLocalStorage();
           alert(`Glückwunsch! Du hast einen neuen Highscore erreicht: ${highscore} Punkte!`);
       } else {
-          alert(`Nicht schlecht! Du hast ${score} Punkte erreicht. Versuche es weiter, um den Highscore zu schlagen!`);
+          alert(`Nicht schlecht! Du hast ${score} Punkte erreicht. Versuche es weiter, um den Highscore von ${highscore} zu schlagen!`);
       }
 
       snake = [{ x: 5, y: 5 }];
