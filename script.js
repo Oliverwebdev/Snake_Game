@@ -1,3 +1,7 @@
+window.onload = function() {
+  alert("Willkommen bei Snakee!\n\nAnweisungen:\n- Verwende die Pfeiltasten, um die Schlange zu bewegen.\n- Iss die Äpfel, um Punkte zu sammeln.\n- Achte darauf, nicht gegen die Wände oder die Schlange selbst zu stoßen.\n\nViel Spaß!");
+ }
+
 const gameBoard = document.getElementById("game-board");
 const scoreDisplay = document.getElementById("score");
 const highscoreDisplay = document.getElementById("highscore");
@@ -131,10 +135,13 @@ function checkCollision() {
     gameAudio.pause(); // Halte den Sound an, wenn das Spiel endet
     gameOverAudio.play(); // Spiele den "Game Over" Sound ab
 
-    alert(`Nicht schlecht! Du hast ${score} Punkte erreicht! `);
-    if (score > highscore) {
+    if (score >= highscore) {
       highscore = score;
+      alert(`Glückwunsch! Du hast einen neuen Highscore erreicht: ${highscore} Punkte!`);
+    } else {
+      alert(`Nicht schlecht! Du hast ${score} Punkte erreicht. Versuche es weiter, um den Highscore zu schlagen!`);
     }
+
     snake = [{ x: 5, y: 5 }]; // Zurücksetzen der Schlange auf die Startposition
     direction = "right";
     score = 0;
@@ -142,6 +149,7 @@ function checkCollision() {
     startButton.disabled = false; // Aktivieren des Startbuttons
   }
 }
+
 
 function gameLoop() {
   move();
