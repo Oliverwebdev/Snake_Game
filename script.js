@@ -1,12 +1,16 @@
 window.onload = function() {
   alert("Willkommen bei Snakee!\n\nAnweisungen:\n- Verwende die Pfeiltasten, um die Schlange zu bewegen.\n- Iss die Äpfel, um Punkte zu sammeln.\n- Achte darauf, nicht gegen die Wände oder die Schlange selbst zu stoßen.\n\nViel Spaß!");
- }
+
+  // Versuche, den Highscore aus dem LocalStorage wiederherzustellen
+  highscore = parseInt(localStorage.getItem('highscore')) || 0;
+  highscoreDisplay.textContent = ` ${highscore}`;
+}
 
 const gameBoard = document.getElementById("game-board");
 const scoreDisplay = document.getElementById("score");
 const highscoreDisplay = document.getElementById("highscore");
 const startButton = document.getElementById("start-button");
-const timer = document.getElementById("timer")
+const timer = document.getElementById("timer");
 const gameAudio = document.getElementById("game-audio");
 const gameOverAudio = document.getElementById("game-over-audio");
 const eatAppleAudio = document.getElementById("eat-apple-audio");
@@ -20,28 +24,19 @@ let score = 0;
 let highscore = 0;
 let gameRunning = false;
 
-
-
-
-// game sounds
-function startGame() {
-  if (!gameRunning) {
-    startButton.disabled = true;
-    gameInterval = setInterval(gameLoop, 100);
-    gameRunning = true;
-    gameAudio.play(); // Spiele den Audioklang ab, wenn das Spiel gestartet wird
-  }
+function saveHighscoreToLocalStorage() {
+  localStorage.setItem('highscore', highscore.toString());
 }
 
 function draw() {
   gameBoard.innerHTML = "";
 
   snake.forEach((segment) => {
-    const snakeSegment = document.createElement("div");
-    snakeSegment.style.gridRowStart = segment.y;
-    snakeSegment.style.gridColumnStart = segment.x;
-    snakeSegment.classList.add("snake");
-    gameBoard.appendChild(snakeSegment);
+      const snakeSegment = document.createElement("div");
+      snakeSegment.style.gridRowStart = segment.y;
+      snakeSegment.style.gridColumnStart = segment.x;
+      snakeSegment.classList.add("snake");
+      gameBoard.appendChild(snakeSegment);
   });
 
   const foodElement = document.createElement("div");
@@ -54,102 +49,99 @@ function draw() {
   highscoreDisplay.textContent = ` ${highscore}`;
 }
 
-startButton.addEventListener("click", startGame);
-
+function startGame() {
+  if (!gameRunning) {
+      startButton.disabled = true;
+      gameInterval = setInterval(gameLoop, 100);
+      gameRunning = true;
+      gameAudio.play();
+  }
+}
 
 function move() {
   const head = { ...snake[0] };
 
   switch (direction) {
-    case "up":
-      head.y--;
-      break;
-    case "down":
-      head.y++;
-      break;
-    case "left":
-      head.x--;
-      break;
-    case "right":
-      head.x++;
-      break;
+      case "up":
+          head.y--;
+          break;
+      case "down":
+          head.y++;
+          break;
+      case "left":
+          head.x--;
+          break;
+      case "right":
+          head.x++;
+          break;
   }
 
   snake.unshift(head);
 
   if (head.x === food.x && head.y === food.y) {
-    score++;
-    if (score > highscore) {
-      highscore = score;
-    }
-    eatAppleAudio.play(); // Spiele den Apfel-Sound ab, wenn die Schlange den Apfel frisst
-
-    food = {
-      x: Math.floor(Math.random() * gridSize) + 1,
-      y: Math.floor(Math.random() * gridSize) + 1,
-    };
+      score++;
+      if (score > highscore) {
+          highscore = score;
+          saveHighscoreToLocalStorage();
+      }
+      eatAppleAudio.play();
+      food = {
+          x: Math.floor(Math.random() * gridSize) + 1,
+          y: Math.floor(Math.random() * gridSize) + 1,
+      };
   } else {
-    snake.pop();
+      snake.pop();
   }
-  checkCollision(); // Überprüfe auf Kollision nach jedem Zug
-
+  checkCollision();
 }
 
 function changeDirection(event) {
   switch (event.key) {
-    case "ArrowUp":
-      if (direction !== "down") direction = "up";
-      break;
-    case "ArrowDown":
-      if (direction !== "up") direction = "down";
-      break;
-    case "ArrowLeft":
-      if (direction !== "right") direction = "left";
-      break;
-    case "ArrowRight":
-      if (direction !== "left") direction = "right";
-      break;
+      case "ArrowUp":
+          if (direction !== "down") direction = "up";
+          break;
+      case "ArrowDown":
+          if (direction !== "up") direction = "down";
+          break;
+      case "ArrowLeft":
+          if (direction !== "right") direction = "left";
+          break;
+      case "ArrowRight":
+          if (direction !== "left") direction = "right";
+          break;
   }
 }
-
-
-
-
-
-
-
-
 
 function checkCollision() {
   const head = snake[0];
   if (
-    head.x < 1 ||
-    head.x > gridSize ||
-    head.y < 1 ||
-    head.y > gridSize ||
-    snake
-      .slice(1)
-      .some((segment) => segment.x === head.x && segment.y === head.y)
+      head.x < 1 ||
+      head.x > gridSize ||
+      head.y < 1 ||
+      head.y > gridSize ||
+      snake
+          .slice(1)
+          .some((segment) => segment.x === head.x && segment.y === head.y)
   ) {
-    clearInterval(gameInterval);
-    gameAudio.pause(); // Halte den Sound an, wenn das Spiel endet
-    gameOverAudio.play(); // Spiele den "Game Over" Sound ab
+      clearInterval(gameInterval);
+      gameAudio.pause();
+      gameOverAudio.play();
 
-    if (score >= highscore) {
-      highscore = score;
-      alert(`Glückwunsch! Du hast einen neuen Highscore erreicht: ${highscore} Punkte!`);
-    } else {
-      alert(`Nicht schlecht! Du hast ${score} Punkte erreicht. Versuche es weiter, um den Highscore zu schlagen!`);
-    }
+      if (score >= highscore) {
+          highscore = score;
+          saveHighscoreToLocalStorage();
+          alert(`Glückwunsch! Du hast einen neuen Highscore erreicht: ${highscore} Punkte!`);
+      } else {
+          alert(`Nicht schlecht! Du hast ${score} Punkte erreicht. Versuche es weiter, um den Highscore zu schlagen!`);
+      }
 
-    snake = [{ x: 5, y: 5 }]; // Zurücksetzen der Schlange auf die Startposition
-    direction = "right";
-    score = 0;
-    gameRunning = false;
-    startButton.disabled = false; // Aktivieren des Startbuttons
+      snake = [{ x: 5, y: 5 }];
+      direction = "right";
+      score = 0;
+      gameRunning = false;
+      startButton.disabled = false;
   }
 }
-
 
 function gameLoop() {
   move();
@@ -158,17 +150,11 @@ function gameLoop() {
 }
 
 startButton.addEventListener("click", () => {
-  if (!gameRunning && collisionOccurred) {
-    collisionOccurred = false; // Setze die Kollisionsvariable zurück, wenn das Spiel neu gestartet wird
-  }
-
   if (!gameRunning) {
-    startButton.disabled = true;
-    gameInterval = setInterval(gameLoop, 100);
-    gameRunning = true;
+      startButton.disabled = true;
+      gameInterval = setInterval(gameLoop, 100);
+      gameRunning = true;
   }
 });
-
-
 
 document.addEventListener("keydown", changeDirection);
